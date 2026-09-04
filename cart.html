@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Cart — SDK Masale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3E8; --cream-2: #F3E6D6; --card: #FFFFFF; --ink: #221912; --muted: #6B5E52;
+    --red: #A32418; --red-dark: #7E1B12; --leaf: #4C6B39; --gold: #C99A3E; --line: rgba(34,25,18,0.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--ink);font-family:'Work Sans', sans-serif;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(251,243,232,0.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1300px;margin:0 auto;}
+  .logo img{height:40px;width:auto;display:block;}
+  .nav-links{display:flex;gap:34px;list-style:none;font-size:13.5px;letter-spacing:0.3px;text-transform:uppercase;font-weight:500;}
+  .nav-links a{opacity:0.8;transition:opacity .2s;}
+  .nav-links a:hover{opacity:1;color:var(--red);}
+  .nav-actions{display:flex;align-items:center;gap:20px;font-size:13px;}
+  .cart-dot{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  .breadcrumb{padding:18px 32px;max-width:1300px;margin:0 auto;font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+  .breadcrumb a:hover{color:var(--red);}
+
+  .page-title{text-align:center;font-family:'Fraunces',serif;font-size:32px;font-weight:700;margin:8px 0 40px;}
+
+  .cart-wrap{max-width:1180px;margin:0 auto;padding:0 32px 100px;display:grid;grid-template-columns:1fr 340px;gap:44px;align-items:start;}
+
+  .cart-table-head{display:grid;grid-template-columns:1fr 110px 130px 110px;gap:12px;padding:0 0 14px;border-bottom:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);}
+  .cart-table-head span:not(:first-child){text-align:center;}
+  .cart-table-head span:last-child{text-align:right;}
+
+  #cart-line-items{}
+  .empty-cart{padding:80px 0;text-align:center;color:var(--muted);}
+  .empty-cart a{color:var(--red);font-weight:600;text-decoration:underline;}
+
+  .line-item{display:grid;grid-template-columns:1fr 110px 130px 110px;gap:12px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line);}
+  .li-product{display:flex;gap:14px;align-items:center;}
+  .li-remove{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;padding:0 4px;}
+  .li-remove:hover{color:var(--red);}
+  .li-thumb{width:66px;height:66px;background:var(--cream-2);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;}
+  .li-thumb img{max-width:100%;max-height:100%;object-fit:contain;}
+  .li-info h4{font-family:'Work Sans',sans-serif;font-size:14.5px;font-weight:600;margin-bottom:4px;}
+  .li-info .li-size{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);font-style:italic;}
+  .li-price{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13.5px;}
+  .li-qty{display:flex;justify-content:center;}
+  .qty-stepper{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:7px;overflow:hidden;}
+  .qty-stepper button{width:30px;height:32px;background:var(--card);border:none;font-size:14px;cursor:pointer;color:var(--ink);}
+  .qty-stepper button:hover{background:var(--cream-2);}
+  .qty-stepper span{width:32px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .li-total{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--red-dark);}
+
+  .cart-actions-row{display:flex;justify-content:space-between;align-items:center;padding-top:22px;font-size:13.5px;}
+  .cart-actions-row a{color:var(--red);font-weight:500;}
+  .cart-actions-row a:hover{text-decoration:underline;}
+
+  /* Sidebar */
+  .cart-sidebar{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px;}
+  .side-label{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--ink);margin-bottom:10px;font-weight:500;}
+  .side-block{margin-bottom:22px;}
+  .side-input{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:7px;font-size:13.5px;font-family:'Work Sans',sans-serif;background:var(--cream-2);}
+  textarea.side-input{resize:vertical;min-height:80px;}
+  .side-btn{width:100%;padding:11px;background:var(--ink);color:#fff;border:none;border-radius:7px;font-size:12.5px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;margin-top:10px;}
+  .side-btn:hover{opacity:0.9;}
+
+  .subtotal-row{display:flex;justify-content:space-between;font-size:15px;font-weight:600;padding-top:6px;}
+  .savings-row{display:flex;justify-content:space-between;font-size:13px;color:var(--leaf);margin-top:8px;font-style:italic;}
+  .ship-note{font-size:12px;color:var(--muted);margin-top:10px;}
+
+  .checkout-btn{width:100%;margin-top:20px;padding:15px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;letter-spacing:0.4px;cursor:pointer;font-family:'Work Sans',sans-serif;}
+  .checkout-btn:hover{background:var(--red-dark);}
+
+  .cart-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+    padding:12px 20px;border-radius:8px;font-size:13.5px;z-index:250;opacity:0;pointer-events:none;transition:all .25s ease;}
+  .cart-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  footer{padding:56px 32px 36px;background:var(--cream);border-top:1px solid var(--line);margin-top:20px;}
+  .foot-bottom{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;padding-top:24px;font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;flex-wrap:wrap;gap:12px;}
+
+  @media(max-width:860px){
+    .cart-wrap{grid-template-columns:1fr;}
+    .cart-table-head{display:none;}
+    .line-item{grid-template-columns:1fr;gap:10px;}
+    .li-price{display:none;}
+    .li-qty{justify-content:flex-start;}
+    .li-total{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><img src="images/sdk-logo-badge.png" alt="SDK Masale"></div>
+    <ul class="nav-links">
+      <li><a href="sdk-masale-homepage.html">Home</a></li>
+      <li><a href="catalog.html">Shop All</a></li>
+      <li><a href="sdk-masale-homepage.html#story">Our Story</a></li>
+      <li><a href="sdk-masale-homepage.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="login-link">Login</a>
+      <a href="wishlist.html">Wishlist <span class="cart-dot wishlist-dot">0</span></a>
+      <a href="cart.html">Cart <span class="cart-dot">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<div class="breadcrumb"><a href="sdk-masale-homepage.html">Home</a> &nbsp;/&nbsp; <span>Cart</span></div>
+<h1 class="page-title">Your Cart</h1>
+
+<div class="cart-wrap">
+  <div class="cart-table">
+    <div class="cart-table-head">
+      <span>Product</span><span>Price</span><span>Quantity</span><span>Total</span>
+    </div>
+    <div id="cart-line-items"></div>
+    <div class="cart-actions-row">
+      <a href="catalog.html">&larr; Continue Shopping</a>
+      <a href="#" id="update-cart-link">&#8635; Update</a>
+    </div>
+  </div>
+
+  <div class="cart-sidebar">
+    <div class="side-block">
+      <div class="side-label">Delivery Pincode</div>
+      <input class="side-input" type="text" id="pincode-input" placeholder="Enter pincode" maxlength="6">
+      <button class="side-btn" type="button" id="check-pincode-btn">Check Availability</button>
+    </div>
+    <div class="side-block">
+      <div class="side-label">Order Notes</div>
+      <textarea class="side-input" id="order-notes" placeholder="Special instructions for your order (optional)"></textarea>
+    </div>
+
+    <div class="subtotal-row"><span>Subtotal</span><span id="side-subtotal">₹0</span></div>
+    <div class="savings-row" id="side-savings"></div>
+    <div class="ship-note">Shipping &amp; taxes calculated at checkout.</div>
+
+    <button class="checkout-btn" type="button" id="checkout-btn" onclick="window.location.href='checkout.html'">Proceed to Checkout</button>
+  </div>
+</div>
+
+<div class="cart-toast" id="page-toast"></div>
+
+<footer>
+  <div class="foot-bottom">
+    <div>© SDK Masale. All Rights Reserved.</div>
+    <div><a href="policies.html">Privacy Policy</a> &nbsp;•&nbsp; <a href="policies.html">Terms of Service</a></div>
+  </div>
+</footer>
+
+<script src="js/products-data.js"></script>
+<script src="js/wishlist.js"></script>
+<script src="js/profile.js"></script>
+<script>
+  const CART_KEY = 'sdk_cart';
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch (e) { return []; }
+  }
+  function saveCart(cart) {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    document.querySelectorAll('.cart-dot').forEach(el => { el.textContent = cartCount(); });
+  }
+  function cartCount() { return getCart().reduce((n, i) => n + i.qty, 0); }
+  function cartTotal() { return getCart().reduce((s, i) => s + i.price * i.qty, 0); }
+  function cartSavings() { return getCart().reduce((s, i) => s + (i.mrp - i.price) * i.qty, 0); }
+
+  function changeQty(idx, delta) {
+    const cart = getCart();
+    if (!cart[idx]) return;
+    cart[idx].qty += delta;
+    if (cart[idx].qty < 1) cart.splice(idx, 1);
+    saveCart(cart);
+    render();
+  }
+  function removeItem(idx) {
+    const cart = getCart();
+    cart.splice(idx, 1);
+    saveCart(cart);
+    render();
+  }
+
+  function render() {
+    const cart = getCart();
+    const wrap = document.getElementById('cart-line-items');
+
+    if (cart.length === 0) {
+      wrap.innerHTML = '<div class="empty-cart">Your cart is empty. <a href="catalog.html">Continue shopping &rarr;</a></div>';
+    } else {
+      wrap.innerHTML = cart.map((item, idx) => `
+        <div class="line-item">
+          <div class="li-product">
+            <button class="li-remove" type="button" data-remove="${idx}" title="Remove">&times;</button>
+            <div class="li-thumb"><img src="${item.image}" alt="${item.name}"></div>
+            <div class="li-info">
+              <h4>${item.name}</h4>
+              <div class="li-size">Size: ${item.sizeLabel}</div>
+            </div>
+          </div>
+          <div class="li-price">₹${item.price}.00</div>
+          <div class="li-qty">
+            <div class="qty-stepper">
+              <button type="button" data-dec="${idx}">–</button>
+              <span>${item.qty}</span>
+              <button type="button" data-inc="${idx}">+</button>
+            </div>
+          </div>
+          <div class="li-total">₹${(item.price * item.qty).toFixed(2)}</div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('side-subtotal').textContent = '₹' + cartTotal().toFixed(2);
+    const savings = cartSavings();
+    document.getElementById('side-savings').innerHTML = savings > 0
+      ? `You're saving <span>₹${savings.toFixed(2)}</span>` : '';
+
+    wrap.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', () => changeQty(parseInt(b.dataset.inc), 1)));
+    wrap.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => changeQty(parseInt(b.dataset.dec), -1)));
+    wrap.querySelectorAll('[data-remove]').forEach(b => b.addEventListener('click', () => removeItem(parseInt(b.dataset.remove))));
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('page-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  document.getElementById('update-cart-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    render();
+    showToast('Cart updated');
+  });
+
+  document.getElementById('check-pincode-btn').addEventListener('click', () => {
+    const val = document.getElementById('pincode-input').value.trim();
+    if (val.length === 6) showToast('Delivery available at ' + val);
+    else showToast('Please enter a valid 6-digit pincode');
+  });
+
+  render();
+</script>
+
+</body>
+</html>

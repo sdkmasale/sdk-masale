@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop All Products — SDK Masale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3E8; --cream-2: #F3E6D6; --card: #FFFFFF; --ink: #221912; --muted: #6B5E52;
+    --red: #A32418; --red-dark: #7E1B12; --leaf: #4C6B39; --gold: #C99A3E; --line: rgba(34,25,18,0.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--ink);font-family:'Work Sans', sans-serif;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(251,243,232,0.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1300px;margin:0 auto;}
+  .logo{font-family:'Fraunces',serif;font-weight:700;font-size:21px;letter-spacing:0.3px;}
+  .logo span{color:var(--red);}
+  .nav-links{display:flex;gap:34px;list-style:none;font-size:13.5px;letter-spacing:0.3px;text-transform:uppercase;font-weight:500;}
+  .nav-links a{opacity:0.8;transition:opacity .2s;}
+  .nav-links a:hover{opacity:1;color:var(--red);}
+  .nav-links a.active{opacity:1;color:var(--red);}
+  .nav-actions{display:flex;align-items:center;gap:20px;font-size:13px;}
+  .cart-dot{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  .breadcrumb{padding:18px 32px;max-width:1300px;margin:0 auto;font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+  .breadcrumb a:hover{color:var(--red);}
+
+  .layout{max-width:1300px;margin:0 auto;padding:0 32px 90px;display:grid;grid-template-columns:230px 1fr;gap:44px;}
+
+  .sidebar h3{font-family:'IBM Plex Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:16px;}
+  .sidebar-block{margin-bottom:38px;}
+  .sidebar-block ul{list-style:none;}
+  .sidebar-block li{margin-bottom:11px;}
+  .sidebar-block a{font-size:14px;color:var(--muted);transition:color .2s;}
+  .sidebar-block a:hover{color:var(--red);}
+  .sidebar-block a.current{color:var(--red);font-weight:600;}
+  .price-inputs{display:flex;gap:8px;align-items:center;}
+  .price-inputs input{width:70px;padding:8px 10px;border:1px solid var(--line);border-radius:5px;background:var(--card);font-size:13px;}
+
+  .main-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;padding-top:8px;}
+  .main-top h1{font-family:'Fraunces',serif;font-size:32px;font-weight:700;}
+  .result-count{font-size:13px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+  .sort-row{display:flex;justify-content:flex-end;margin-bottom:28px;}
+  .sort-select{font-size:13px;padding:9px 14px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font-family:'Work Sans',sans-serif;}
+
+  .cat-block{margin-bottom:64px;}
+  .cat-block-head{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--line);}
+  .cat-block-head .swatch{width:26px;height:6px;border-radius:3px;}
+  .cat-block-head h2{font-family:'Fraunces',serif;font-size:24px;font-weight:700;}
+
+  .pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;}
+  .pcard-link{display:block;}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:box-shadow .2s ease,transform .2s ease;}
+  .pcard:hover{box-shadow:0 14px 28px rgba(34,25,18,0.09);transform:translateY(-3px);}
+  .pcard-img{aspect-ratio:1/1.05;position:relative;background:var(--cream-2);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px;}
+  .wish-heart{position:absolute;top:10px;right:10px;z-index:6;width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--muted);cursor:pointer;}
+  .wish-heart:hover{border-color:var(--red);color:var(--red);}
+  .wish-heart.wishlisted{color:var(--red);border-color:var(--red);}
+  .pcard-img img{position:relative;z-index:1;max-width:94%;max-height:96%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(34,25,18,0.12));}
+  .pcard-img::after{content:'';position:absolute;bottom:6%;left:50%;transform:translateX(-50%);width:70%;height:10%;background:radial-gradient(ellipse at center, rgba(34,25,18,0.08) 0%, rgba(34,25,18,0.02) 70%, transparent 100%);border-radius:50%;z-index:1;}
+  .sale-badge{position:absolute;top:10px;left:10px;z-index:5;background:var(--red);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 9px;border-radius:3px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600;}
+  .pcard h4{font-size:13.5px;font-weight:500;padding:14px 14px 4px;line-height:1.35;min-height:38px;}
+  .pcard-price{font-family:'IBM Plex Mono',monospace;font-size:13px;padding:0 14px 16px;color:var(--red-dark);font-weight:600;}
+  .pcard-price s{color:var(--muted);font-weight:400;margin-right:7px;font-size:11.5px;}
+
+  footer{padding:56px 32px 36px;background:var(--cream);border-top:1px solid var(--line);}
+  .foot-grid{max-width:1300px;margin:0 auto 44px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;}
+  .foot-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:14px;}
+  .foot-logo span{color:var(--red);}
+  footer p{color:var(--muted);font-size:13.5px;line-height:1.6;max-width:260px;}
+  .foot-col h5{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:16px;}
+  .foot-col a{display:block;color:var(--muted);font-size:13.5px;margin-bottom:11px;}
+  .foot-col a:hover{color:var(--red);}
+  .foot-bottom{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;flex-wrap:wrap;gap:12px;}
+
+  @media(max-width:980px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{display:flex;gap:32px;flex-wrap:wrap;}
+    .pgrid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:600px){
+    .nav-links{display:none;}
+    .pgrid{grid-template-columns:repeat(2,1fr);gap:14px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><img src="images/sdk-logo-badge.png" alt="SDK Masale" style="height:40px;width:auto;display:block;"></div>
+    <ul class="nav-links">
+      <li><a href="sdk-masale-homepage.html">Home</a></li>
+      <li><a href="catalog.html" class="active">Shop All</a></li>
+      <li><a href="sdk-masale-homepage.html#story">Our Story</a></li>
+      <li><a href="sdk-masale-homepage.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="login-link">Login</a>
+      <a href="wishlist.html">Wishlist <span class="cart-dot wishlist-dot">0</span></a>
+      <a href="cart.html">Cart <span class="cart-dot">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="sdk-masale-homepage.html">Home</a> &nbsp;/&nbsp; Shop All Products
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-block">
+      <h3>Categories</h3>
+      <ul>
+        <li><a href="#" data-cat="spices" class="cat-link current">Spices &amp; Masalas</a></li>
+        <li><a href="#" data-cat="special" class="cat-link">Special Products</a></li>
+        <li><a href="#" data-cat="oils" class="cat-link">Cooking Oils</a></li>
+        <li><a href="#" data-cat="all" class="cat-link">Show All</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-block">
+      <h3>Price</h3>
+      <div class="price-inputs">
+        <input type="text" placeholder="From">
+        <span style="color:var(--muted);">—</span>
+        <input type="text" placeholder="To">
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="main-top">
+      <h1 id="page-title">Spices &amp; Masalas</h1>
+      <span class="result-count" id="result-count">7 products</span>
+    </div>
+    <div class="sort-row">
+      <select class="sort-select">
+        <option>Sort by: Featured</option>
+        <option>Best Selling</option>
+        <option>Price, low to high</option>
+        <option>Price, high to low</option>
+        <option>A-Z</option>
+      </select>
+    </div>
+
+    <div class="cat-block" id="spices">
+      <div class="cat-block-head"><div class="swatch" style="background:var(--gold)"></div><h2>Spices &amp; Masalas</h2></div>
+      <div class="pgrid">
+      <a href="product.html?id=kanda-lasun-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="kanda-lasun-masala" title="Add to wishlist">&#9825;</button><img src="images/kanda-lasun-masala-front-nobg.png" alt="Kanda Lasun Masala"></div>
+        <h4>Kanda Lasun Masala</h4>
+        <div class="pcard-price"><s>₹200</s>From ₹160</div>
+      </div>
+      </a>
+      <a href="product.html?id=garam-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="garam-masala" title="Add to wishlist">&#9825;</button><img src="images/garam-masala-front-nobg.png" alt="Garam Masala" ></div>
+        <h4>Garam Masala</h4>
+        <div class="pcard-price"><s>₹390</s>From ₹312</div>
+      </div>
+      </a>
+      <a href="product.html?id=coriander-powder" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="coriander-powder" title="Add to wishlist">&#9825;</button><img src="images/coriander-powder-front-nobg.png" alt="Coriander Powder"></div>
+        <h4>Coriander Powder</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=chili-powder" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="chili-powder" title="Add to wishlist">&#9825;</button><img src="images/chili-powder-front-nobg.png" alt="Chili Powder"></div>
+        <h4>Chili Powder</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=kashmiri-mirchi-powder" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="kashmiri-mirchi-powder" title="Add to wishlist">&#9825;</button><img src="images/kashmiri-mirchi-powder-front-nobg.png" alt="Kashmiri Mirchi Powder"></div>
+        <h4>Kashmiri Mirchi Powder</h4>
+        <div class="pcard-price"><s>₹260</s>From ₹208</div>
+      </div>
+      </a>
+      <a href="product.html?id=cumin-powder" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="cumin-powder" title="Add to wishlist">&#9825;</button><img src="images/cumin-powder-front-nobg.png" alt="Cumin Powder"></div>
+        <h4>Cumin Powder</h4>
+        <div class="pcard-price"><s>₹240</s>From ₹192</div>
+      </div>
+      </a>
+      <a href="product.html?id=haldi-powder" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="haldi-powder" title="Add to wishlist">&#9825;</button><img src="images/haldi-powder-front-nobg.png" alt="Haldi Powder"></div>
+        <h4>Haldi Powder</h4>
+        <div class="pcard-price"><s>₹220</s>From ₹176</div>
+      </div>
+      </a>
+      </div>
+    </div>
+
+    <div class="cat-block" id="special" style="display:none;">
+      <div class="cat-block-head"><div class="swatch" style="background:var(--red)"></div><h2>Special Products</h2></div>
+      <div class="pgrid">
+      <a href="product.html?id=pav-bhaji-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="pav-bhaji-masala" title="Add to wishlist">&#9825;</button><img src="images/pav-bhaji-masala-front-nobg.png" alt="Pav Bhaji Masala" ></div>
+        <h4>Pav Bhaji Masala</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=chicken-biryani-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="chicken-biryani-masala" title="Add to wishlist">&#9825;</button><img src="images/chicken-biryani-masala-front-nobg.png" alt="Chicken Biryani Masala"></div>
+        <h4>Chicken Biryani Masala</h4>
+        <div class="pcard-price"><s>₹280</s>From ₹224</div>
+      </div>
+      </a>
+      <a href="product.html?id=mutton-biryani-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="mutton-biryani-masala" title="Add to wishlist">&#9825;</button><img src="images/mutton-biryani-masala-1kg-front.png" alt="Mutton Biryani Masala"></div>
+        <h4>Mutton Biryani Masala</h4>
+        <div class="pcard-price"><s>₹280</s>From ₹224</div>
+      </div>
+      </a>
+      <a href="product.html?id=egg-biryani-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="egg-biryani-masala" title="Add to wishlist">&#9825;</button><img src="images/egg-biryani-masala-1kg-front.png" alt="Egg Biryani Masala"></div>
+        <h4>Egg Biryani Masala</h4>
+        <div class="pcard-price"><s>₹280</s>From ₹224</div>
+      </div>
+      </a>
+      <a href="product.html?id=kitchen-king-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="kitchen-king-masala" title="Add to wishlist">&#9825;</button><img src="images/kitchen-king-masala-front-nobg.png" alt="Kitchen King Masala" ></div>
+        <h4>Kitchen King Masala</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=chole-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="chole-masala" title="Add to wishlist">&#9825;</button><img src="images/chole-masala-1kg-front.png" alt="Chole Masala"></div>
+        <h4>Chole Masala</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=sambar-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="sambar-masala" title="Add to wishlist">&#9825;</button><img src="images/sambar-masala-1kg-front.jpeg" alt="Sambar Masala"></div>
+        <h4>Sambar Masala</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=chaat-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="chaat-masala" title="Add to wishlist">&#9825;</button><img src="images/chaat-masala-1kg-front.jpeg" alt="Chaat Masala"></div>
+        <h4>Chaat Masala</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=egg-curry-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="egg-curry-masala" title="Add to wishlist">&#9825;</button><img src="images/egg-curry-masala-1kg-front.png" alt="Egg Curry Masala"></div>
+        <h4>Egg Curry Masala</h4>
+        <div class="pcard-price"><s>₹190</s>From ₹152</div>
+      </div>
+      </a>
+      <a href="product.html?id=chicken-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="chicken-masala" title="Add to wishlist">&#9825;</button><img src="images/chicken-masala-front-nobg.png" alt="Chicken Masala" ></div>
+        <h4>Chicken Masala</h4>
+        <div class="pcard-price"><s>₹390</s>From ₹312</div>
+      </div>
+      </a>
+      <a href="product.html?id=malvani-mix-masala" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="malvani-mix-masala" title="Add to wishlist">&#9825;</button><img src="images/malvani-mix-masala-front-nobg.png" alt="Malvani Mix Masala" ></div>
+        <h4>Malvani Mix Masala</h4>
+        <div class="pcard-price"><s>₹210</s>From ₹168</div>
+      </div>
+      </a>
+      </div>
+    </div>
+
+    <div class="cat-block" id="oils" style="display:none;">
+      <div class="cat-block-head"><div class="swatch" style="background:#D9B23C"></div><h2>Cooking Oils</h2></div>
+      <div class="pgrid">
+      <a href="product.html?id=sesame-oil" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="sesame-oil" title="Add to wishlist">&#9825;</button><img src="images/sesame-oil-front-nobg.png" alt="Sesame Oil" ></div>
+        <h4>Sesame Oil</h4>
+        <div class="pcard-price"><s>₹699</s>From ₹559</div>
+      </div>
+      </a>
+      <a href="product.html?id=mustard-oil" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="mustard-oil" title="Add to wishlist">&#9825;</button><img src="images/mustard-oil-front-nobg.png" alt="Mustard Oil" ></div>
+        <h4>Mustard Oil</h4>
+        <div class="pcard-price"><s>₹399</s>From ₹319</div>
+      </div>
+      </a>
+      <a href="product.html?id=coconut-oil" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="coconut-oil" title="Add to wishlist">&#9825;</button><img src="images/coconut-oil-front-nobg.png" alt="Coconut Oil" ></div>
+        <h4>Coconut Oil</h4>
+        <div class="pcard-price"><s>₹599</s>From ₹479</div>
+      </div>
+      </a>
+      <a href="product.html?id=groundnut-oil" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="groundnut-oil" title="Add to wishlist">&#9825;</button><img src="images/groundnut-oil-front-nobg.png" alt="Groundnut Oil" ></div>
+        <h4>Groundnut Oil</h4>
+        <div class="pcard-price"><s>₹499</s>From ₹399</div>
+      </div>
+      </a>
+      <a href="product.html?id=safflower-oil" class="pcard-link">
+      <div class="pcard">
+        <div class="pcard-img"><span class="sale-badge">Sale</span><button class="wish-heart" type="button" data-wishlist-id="safflower-oil" title="Add to wishlist">&#9825;</button><img src="images/safflower-oil-front-nobg.png" alt="Safflower Oil" ></div>
+        <h4>Safflower Oil</h4>
+        <div class="pcard-price"><s>₹499</s>From ₹399</div>
+      </div>
+      </a>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer id="contact">
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo"><img src="images/sdk-logo-badge.png" alt="SDK Masale" style="height:52px;width:auto;display:block;margin-bottom:10px;"></div>
+      <p>Authentic Indian masalas, spices and cold-pressed oils made with carefully selected ingredients.</p>
+      <p style="margin-top:14px;">Office No. 309, Punit Chamber,<br>Sector 18, Vashi, Navi Mumbai 400703</p>
+    </div>
+    <div class="foot-col">
+      <h5>Shop</h5>
+      <a href="#spices">Spices &amp; Masalas</a>
+      <a href="#special">Special Products</a>
+      <a href="#oils">Cooking Oils</a>
+    </div>
+    <div class="foot-col">
+      <h5>Company</h5>
+      <a href="sdk-masale-homepage.html#story">Our Story</a>
+      <a href="sdk-masale-homepage.html#contact">Contact Us</a>
+      <a href="#">Wholesale Enquiries</a>
+      <a href="policies.html#shipping">Shipping Policy</a>
+      <a href="policies.html#refund">Refund Policy</a>
+      <a href="policies.html#privacy">Privacy Policy</a>
+      <a href="policies.html#terms">Terms of Service</a>
+    </div>
+    <div class="foot-col">
+      <h5>Get in Touch</h5>
+      <a href="tel:+919619375636">+91 96193 75636</a>
+      <a href="mailto:masalesdk@gmail.com">masalesdk@gmail.com</a>
+      <a href="https://instagram.com/_sdk_masale" target="_blank">Instagram @_sdk_masale</a>
+      <a href="#" target="_blank">Facebook: Santosh Nalawade</a>
+      <a href="#" target="_blank">WhatsApp Channel: SDK Masale</a>
+      <a href="#" target="_blank">YouTube: SDK Masale</a>
+      <a href="#">GSTN: 27BAUPN6392M1ZL</a>
+      <a href="#">FSSAI: 215256016001136</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 SDK Masale. All rights reserved.</span>
+    <span>Made in India</span>
+  </div>
+</footer>
+
+<script>
+  const catNames = {
+    spices: "Spices & Masalas",
+    special: "Special Products",
+    oils: "Cooking Oils",
+    all: "Shop All Products"
+  };
+  const catCounts = { spices: 7, special: 11, oils: 5, all: 23 };
+
+  function showCategory(cat){
+    document.querySelectorAll('.cat-link').forEach(l => {
+      l.classList.toggle('current', l.dataset.cat === cat);
+    });
+    document.querySelectorAll('.cat-block').forEach(block => {
+      block.style.display = (cat === 'all' || block.id === cat) ? '' : 'none';
+    });
+    document.getElementById('page-title').textContent = catNames[cat] || catNames.spices;
+    document.getElementById('result-count').textContent = (catCounts[cat] || catCounts.spices) + ' products';
+  }
+
+  document.querySelectorAll('.cat-link').forEach(link => {
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      showCategory(this.dataset.cat);
+      window.scrollTo({top: 0, behavior:'smooth'});
+    });
+  });
+
+  // Honor #spices / #special / #oils links coming from other pages
+  window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.replace('#','');
+    if(hash && catNames[hash]){
+      showCategory(hash);
+    }
+  });
+</script>
+<script src="js/cart.js"></script>
+<script src="js/wishlist.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

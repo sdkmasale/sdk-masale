@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — SDK Masale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3E8; --cream-2: #F3E6D6; --card: #FFFFFF; --ink: #221912; --muted: #6B5E52;
+    --red: #A32418; --red-dark: #7E1B12; --leaf: #4C6B39; --gold: #C99A3E; --line: rgba(34,25,18,0.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#fff;color:var(--ink);font-family:'Work Sans', sans-serif;-webkit-font-smoothing:antialiased;font-size:14px;}
+  a{color:inherit;text-decoration:none;}
+  input,select,textarea{font-family:'Work Sans',sans-serif;}
+
+  .co-header{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--line);max-width:1240px;margin:0 auto;}
+  .co-logo img{height:32px;}
+  .co-signin{font-size:13px;color:var(--red);text-decoration:underline;}
+
+  .co-wrap{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;min-height:calc(100vh - 80px);}
+  .co-left{padding:44px 60px 60px;border-right:1px solid var(--line);}
+  .co-right{background:var(--cream-2);padding:44px 40px 60px;}
+
+  .co-section{margin-bottom:34px;}
+  .co-section-title{font-family:'Fraunces',serif;font-size:19px;font-weight:700;margin-bottom:16px;}
+  .co-note{font-size:12.5px;color:var(--muted);margin-bottom:14px;}
+
+  .field-row{display:flex;gap:12px;margin-bottom:12px;}
+  .field{flex:1;position:relative;}
+  .field input, .field select{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:7px;font-size:13.5px;background:#fff;color:var(--ink);}
+  .field input:focus, .field select:focus{outline:none;border-color:var(--red);}
+  .field label{position:absolute;top:-8px;left:11px;background:#fff;padding:0 5px;font-size:11px;color:var(--muted);}
+
+  .co-checkbox{display:flex;align-items:center;gap:9px;margin-bottom:10px;font-size:13px;color:var(--muted);}
+  .co-checkbox input{width:15px;height:15px;accent-color:var(--red);}
+
+  .ship-box{background:var(--cream-2);border:1px solid var(--line);border-radius:8px;padding:18px;font-size:13px;color:var(--muted);}
+
+  .pay-option{border:2px solid var(--red);border-radius:8px;overflow:hidden;}
+  .pay-option-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--cream-2);}
+  .pay-option-head span{font-size:13.5px;font-weight:500;}
+  .pay-icons{display:flex;gap:6px;align-items:center;}
+  .pay-icons .chip{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;padding:3px 6px;border-radius:3px;color:#fff;}
+  .chip.visa{background:#1a1f71;}
+  .chip.mc{background:#eb001b;}
+  .chip.upi{background:var(--leaf);}
+  .pay-option-body{padding:16px;font-size:12.5px;color:var(--muted);background:#fff;}
+
+  .radio-card{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:8px;padding:13px 15px;margin-bottom:10px;font-size:13.5px;cursor:pointer;}
+  .radio-card.active{border-color:var(--red);background:rgba(163,36,24,0.04);}
+  .radio-card input{width:16px;height:16px;accent-color:var(--red);}
+
+  .pay-now-btn{width:100%;padding:16px;background:var(--ink);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;letter-spacing:0.3px;cursor:pointer;margin-top:8px;}
+  .pay-now-btn:hover{background:#000;}
+
+  /* Right: order summary */
+  .co-brand{display:flex;align-items:center;gap:10px;margin-bottom:26px;}
+  .co-brand img{height:30px;}
+
+  .sum-item{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px;}
+  .sum-thumb{position:relative;width:56px;height:56px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:6px;flex-shrink:0;border:1px solid var(--line);}
+  .sum-thumb img{max-width:100%;max-height:100%;object-fit:contain;}
+  .sum-qty-badge{position:absolute;top:-7px;right:-7px;background:var(--muted);color:#fff;font-size:10px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;}
+  .sum-info{flex:1;}
+  .sum-info h5{font-size:13.5px;font-weight:600;margin-bottom:3px;}
+  .sum-info .sum-size{font-size:11.5px;color:var(--muted);}
+  .sum-price{font-size:13.5px;font-weight:500;white-space:nowrap;}
+
+  .sum-empty{font-size:13px;color:var(--muted);padding:20px 0;}
+
+  .sum-divider{border-top:1px solid var(--line);margin:20px 0;}
+  .sum-row{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:12px;color:var(--ink);}
+  .sum-row .muted{color:var(--muted);}
+  .sum-total{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;font-weight:600;padding-top:6px;border-top:1px solid var(--line);margin-top:4px;}
+  .sum-total .amt{font-size:20px;}
+  .sum-total .inr{font-size:11px;color:var(--muted);font-weight:400;margin-right:6px;}
+
+  .co-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+    padding:13px 22px;border-radius:8px;font-size:13.5px;z-index:250;opacity:0;pointer-events:none;transition:all .25s ease;max-width:340px;text-align:center;}
+  .co-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media(max-width:900px){
+    .co-wrap{grid-template-columns:1fr;}
+    .co-left{border-right:none;border-bottom:1px solid var(--line);padding:30px 22px;}
+    .co-right{padding:30px 22px;}
+    .field-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<div class="co-header">
+  <a class="co-logo" href="sdk-masale-homepage.html"><img src="images/sdk-logo-badge.png" alt="SDK Masale"></a>
+  <a class="co-signin login-link" href="#">Sign in</a>
+</div>
+
+<div class="co-wrap">
+  <div class="co-left">
+
+    <div class="co-section">
+      <div class="co-section-title">Contact</div>
+      <div class="field-row">
+        <div class="field"><input type="text" id="f-contact" placeholder="Email or mobile phone number"></div>
+      </div>
+      <label class="co-checkbox"><input type="checkbox"> Email me with news and offers</label>
+    </div>
+
+    <div class="co-section">
+      <div class="co-section-title">Delivery</div>
+      <div class="field-row">
+        <div class="field">
+          <label>Country/Region</label>
+          <select><option>India</option></select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><input type="text" id="f-firstname" placeholder="First name"></div>
+        <div class="field"><input type="text" id="f-lastname" placeholder="Last name"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><input type="text" id="f-address" placeholder="Address"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><input type="text" id="f-apartment" placeholder="Apartment, suite, etc. (optional)"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><input type="text" id="f-city" placeholder="City"></div>
+        <div class="field">
+          <select id="state-select">
+            <option>Maharashtra</option>
+            <option>Delhi</option>
+            <option>Karnataka</option>
+            <option>Gujarat</option>
+            <option>Tamil Nadu</option>
+            <option>West Bengal</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field"><input type="text" id="f-pincode" placeholder="PIN code" maxlength="6"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><input type="tel" id="f-phone" placeholder="Phone"></div>
+      </div>
+      <label class="co-checkbox"><input type="checkbox"> Save this information for next time</label>
+      <label class="co-checkbox"><input type="checkbox"> Text me with news and offers</label>
+    </div>
+
+    <div class="co-section">
+      <div class="co-section-title">Shipping method</div>
+      <div class="ship-box">Enter your shipping address to view available shipping methods.</div>
+    </div>
+
+    <div class="co-section">
+      <div class="co-section-title">Payment</div>
+      <div class="co-note">All transactions are secure and encrypted.</div>
+      <div class="pay-option">
+        <div class="pay-option-head">
+          <span>Razorpay Secure (UPI, Card, Int'l Card, Apple Pay)</span>
+          <div class="pay-icons">
+            <span class="chip upi">UPI</span>
+            <span class="chip visa">VISA</span>
+            <span class="chip mc">MC</span>
+          </div>
+        </div>
+        <div class="pay-option-body">After you place your order, we'll send you a secure Razorpay payment link on WhatsApp to complete your payment.</div>
+      </div>
+    </div>
+
+    <div class="co-section">
+      <div class="co-section-title">Billing address</div>
+      <label class="radio-card active" id="billing-same">
+        <input type="radio" name="billing" checked> Same as shipping address
+      </label>
+      <label class="radio-card" id="billing-diff">
+        <input type="radio" name="billing"> Use a different billing address
+      </label>
+    </div>
+
+    <button class="pay-now-btn" type="button" id="pay-now-btn">Place Order via WhatsApp</button>
+  </div>
+
+  <div class="co-right">
+    <div class="co-brand"><img src="images/sdk-logo-badge.png" alt="SDK Masale"></div>
+    <div id="summary-items"></div>
+
+    <div class="sum-divider"></div>
+    <div class="sum-row"><span>Subtotal</span><span id="sum-subtotal">₹0</span></div>
+    <div class="sum-row"><span>Shipping</span><span class="muted">Enter shipping address</span></div>
+    <div class="sum-total">
+      <span>Total</span>
+      <span><span class="inr">INR</span><span class="amt" id="sum-total">₹0</span></span>
+    </div>
+  </div>
+</div>
+
+<div class="co-toast" id="co-toast"></div>
+
+<script src="js/profile.js"></script>
+<script>
+  // Prefill from saved Quick Profile, if any
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.SDKProfile) {
+      const profile = window.SDKProfile.getProfile();
+      if (profile) {
+        const nameParts = profile.name.split(' ');
+        document.getElementById('f-firstname').value = nameParts[0] || '';
+        document.getElementById('f-lastname').value = nameParts.slice(1).join(' ') || '';
+        document.getElementById('f-phone').value = profile.phone || '';
+        document.getElementById('f-contact').value = profile.phone || '';
+      }
+    }
+  });
+
+  const CART_KEY = 'sdk_cart';
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch (e) { return []; }
+  }
+  function cartTotal() { return getCart().reduce((s, i) => s + i.price * i.qty, 0); }
+
+  function renderSummary() {
+    const cart = getCart();
+    const wrap = document.getElementById('summary-items');
+    if (cart.length === 0) {
+      wrap.innerHTML = '<div class="sum-empty">Your cart is empty. <a href="catalog.html" style="color:var(--red);text-decoration:underline;">Go shopping</a></div>';
+    } else {
+      wrap.innerHTML = cart.map(item => `
+        <div class="sum-item">
+          <div class="sum-thumb">
+            <span class="sum-qty-badge">${item.qty}</span>
+            <img src="${item.image}" alt="${item.name}">
+          </div>
+          <div class="sum-info">
+            <h5>${item.name}</h5>
+            <div class="sum-size">${item.sizeLabel}</div>
+          </div>
+          <div class="sum-price">₹${(item.price * item.qty).toFixed(2)}</div>
+        </div>
+      `).join('');
+    }
+    const total = cartTotal();
+    document.getElementById('sum-subtotal').textContent = '₹' + total.toFixed(2);
+    document.getElementById('sum-total').textContent = '₹' + total.toFixed(2);
+  }
+
+  document.getElementById('billing-same').addEventListener('click', () => {
+    document.getElementById('billing-same').classList.add('active');
+    document.getElementById('billing-diff').classList.remove('active');
+  });
+  document.getElementById('billing-diff').addEventListener('click', () => {
+    document.getElementById('billing-diff').classList.add('active');
+    document.getElementById('billing-same').classList.remove('active');
+  });
+
+  function showToast(msg) {
+    const toast = document.getElementById('co-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3200);
+  }
+
+  const BUSINESS_WHATSAPP = '919136065636'; // +91 91360 65636 — SDK Masale WhatsApp order number
+
+  function buildOrderMessage() {
+    const cart = getCart();
+    const firstName = document.getElementById('f-firstname').value.trim();
+    const lastName = document.getElementById('f-lastname').value.trim();
+    const contact = document.getElementById('f-contact').value.trim();
+    const address = document.getElementById('f-address').value.trim();
+    const apartment = document.getElementById('f-apartment').value.trim();
+    const city = document.getElementById('f-city').value.trim();
+    const state = document.getElementById('state-select').value;
+    const pincode = document.getElementById('f-pincode').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+
+    let msg = 'New Order — SDK Masale\n\n';
+    msg += 'Items:\n';
+    cart.forEach(item => {
+      msg += `- ${item.name} (${item.sizeLabel}) x${item.qty} — ₹${(item.price * item.qty).toFixed(2)}\n`;
+    });
+    msg += `\nSubtotal: ₹${cartTotal().toFixed(2)}\n\n`;
+    msg += 'Customer Details:\n';
+    msg += `Name: ${firstName} ${lastName}\n`;
+    msg += `Contact: ${contact}\n`;
+    msg += `Phone: ${phone}\n`;
+    let fullAddress = address;
+    if (apartment) fullAddress += ', ' + apartment;
+    fullAddress += `, ${city}, ${state} - ${pincode}`;
+    msg += `Address: ${fullAddress}\n\n`;
+    msg += 'Please share a payment link to complete this order.';
+    return msg;
+  }
+
+  function validateForm() {
+    const required = ['f-firstname', 'f-lastname', 'f-address', 'f-city', 'f-pincode', 'f-phone'];
+    for (const id of required) {
+      if (!document.getElementById(id).value.trim()) return false;
+    }
+    return true;
+  }
+
+  function logOrder() {
+    const cart = getCart();
+    const firstName = document.getElementById('f-firstname').value.trim();
+    const lastName = document.getElementById('f-lastname').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const city = document.getElementById('f-city').value.trim();
+    const state = document.getElementById('state-select').value;
+    const pincode = document.getElementById('f-pincode').value.trim();
+    const address = document.getElementById('f-address').value.trim();
+
+    const order = {
+      id: 'SDK' + Date.now().toString().slice(-6),
+      timestamp: new Date().toISOString(),
+      customer: (firstName + ' ' + lastName).trim(),
+      phone: phone,
+      address: address + ', ' + city + ', ' + state + ' - ' + pincode,
+      items: cart.map(i => `${i.name} ${i.sizeLabel} x${i.qty}`).join(', '),
+      itemCount: cart.reduce((n, i) => n + i.qty, 0),
+      total: cartTotal(),
+      status: 'Placed'
+    };
+
+    let orders = [];
+    try { orders = JSON.parse(localStorage.getItem('sdk_orders')) || []; } catch (e) { orders = []; }
+    orders.unshift(order);
+    localStorage.setItem('sdk_orders', JSON.stringify(orders));
+  }
+
+  document.getElementById('pay-now-btn').addEventListener('click', () => {
+    if (getCart().length === 0) {
+      showToast('Your cart is empty.');
+      return;
+    }
+    if (!validateForm()) {
+      showToast('Please fill in your name, address, city, PIN code and phone number.');
+      return;
+    }
+    logOrder();
+    const message = buildOrderMessage();
+    const waUrl = 'https://wa.me/' + BUSINESS_WHATSAPP + '?text=' + encodeURIComponent(message);
+    window.open(waUrl, '_blank');
+    showToast('Opening WhatsApp with your order details…');
+    localStorage.removeItem(CART_KEY);
+    renderSummary();
+  });
+
+  renderSummary();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title-tag">Product — SDK Masale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3E8; --cream-2: #F3E6D6; --card: #FFFFFF; --ink: #221912; --muted: #6B5E52;
+    --red: #A32418; --red-dark: #7E1B12; --leaf: #4C6B39; --gold: #C99A3E; --line: rgba(34,25,18,0.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--ink);font-family:'Work Sans', sans-serif;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(251,243,232,0.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1300px;margin:0 auto;}
+  .logo{font-family:'Fraunces',serif;font-weight:700;font-size:21px;letter-spacing:0.3px;}
+  .logo span{color:var(--red);}
+  .nav-links{display:flex;gap:34px;list-style:none;font-size:13.5px;letter-spacing:0.3px;text-transform:uppercase;font-weight:500;}
+  .nav-links a{opacity:0.8;transition:opacity .2s;}
+  .nav-links a:hover{opacity:1;color:var(--red);}
+  .nav-links a.active{opacity:1;color:var(--red);}
+  .nav-actions{display:flex;align-items:center;gap:20px;font-size:13px;}
+  .cart-dot{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  .breadcrumb{padding:18px 32px;max-width:1300px;margin:0 auto;font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+  .breadcrumb a:hover{color:var(--red);}
+  .breadcrumb span{color:var(--ink);}
+
+  .pdp{max-width:1180px;margin:0 auto;padding:10px 32px 90px;display:grid;grid-template-columns:1fr 1fr;gap:56px;}
+
+  /* ---- Gallery ---- */
+  .gallery-main{background:var(--cream-2);border-radius:14px;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;padding:24px;}
+  .gallery-main img{max-width:88%;max-height:90%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 16px 24px rgba(34,25,18,0.14));transition:opacity .18s ease;}
+  .sale-badge{position:absolute;top:16px;left:16px;z-index:5;background:var(--red);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:4px 11px;border-radius:3px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600;}
+  .thumbs{display:flex;gap:12px;margin-top:14px;}
+  .thumb{width:76px;height:76px;border-radius:8px;background:var(--cream-2);border:2px solid transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px;transition:border-color .15s;}
+  .thumb.active{border-color:var(--red);}
+  .thumb img{max-width:100%;max-height:100%;object-fit:contain;}
+
+  /* ---- Info column ---- */
+  .pdp-info{padding-top:6px;}
+  .pdp-cat{font-family:'IBM Plex Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:12px;}
+  .pdp-title{font-family:'Fraunces',serif;font-size:34px;font-weight:700;line-height:1.15;margin-bottom:14px;}
+  .pdp-price{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;color:var(--red-dark);margin-bottom:22px;}
+  .pdp-price s{color:var(--muted);font-weight:400;margin-right:10px;font-size:16px;}
+  .pdp-desc{font-size:15px;line-height:1.7;color:var(--muted);margin-bottom:28px;max-width:480px;}
+
+  .opt-block{margin-bottom:26px;}
+  .opt-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:1px;color:var(--ink);margin-bottom:12px;font-weight:500;}
+  .size-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .size-btn{padding:10px 18px;border:1.5px solid var(--line);border-radius:7px;background:var(--card);font-size:13.5px;font-family:'Work Sans',sans-serif;font-weight:500;cursor:pointer;transition:all .15s;}
+  .size-btn:hover{border-color:var(--red);}
+  .size-btn.active{border-color:var(--red);background:var(--red);color:#fff;}
+
+  .qty-row{display:flex;align-items:center;gap:16px;margin-bottom:22px;}
+  .qty-stepper{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:7px;overflow:hidden;}
+  .qty-stepper button{width:38px;height:40px;background:var(--card);border:none;font-size:16px;cursor:pointer;color:var(--ink);}
+  .qty-stepper button:hover{background:var(--cream-2);}
+  .qty-stepper span{width:40px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:14px;}
+
+  .btn-row{display:flex;gap:14px;margin-bottom:30px;}
+  .btn-add{flex:1;padding:16px 24px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:14.5px;font-weight:600;letter-spacing:0.3px;cursor:pointer;font-family:'Work Sans',sans-serif;transition:background .15s;}
+  .btn-add:hover{background:var(--red-dark);}
+  .btn-wish{width:52px;height:52px;border:1.5px solid var(--line);border-radius:8px;background:var(--card);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
+  .btn-wish:hover{border-color:var(--red);color:var(--red);}
+  .btn-wish.wisted, .btn-wish.wishlisted{border-color:var(--red);color:var(--red);}
+
+  .trust-row{display:flex;gap:22px;flex-wrap:wrap;padding-top:22px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);}
+  .trust-row span{display:flex;align-items:center;gap:6px;}
+
+  .pdp-tabs{max-width:1180px;margin:70px auto 0;padding:0 32px;}
+  .tab-heads{display:flex;gap:32px;border-bottom:1px solid var(--line);margin-bottom:26px;}
+  .tab-head{font-family:'IBM Plex Mono',monospace;font-size:12.5px;text-transform:uppercase;letter-spacing:0.8px;padding-bottom:14px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;}
+  .tab-head.active{color:var(--red);border-bottom-color:var(--red);}
+  .tab-panel{display:none;max-width:720px;font-size:14.5px;line-height:1.75;color:var(--muted);}
+  .tab-panel.active{display:block;}
+  .tab-panel h4{font-family:'Fraunces',serif;font-size:18px;color:var(--ink);margin-bottom:10px;font-weight:600;}
+
+  footer{padding:56px 32px 36px;background:var(--cream);border-top:1px solid var(--line);margin-top:70px;}
+  .foot-grid{max-width:1300px;margin:0 auto 44px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;}
+  .foot-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:14px;}
+  .foot-logo span{color:var(--red);}
+  footer p{color:var(--muted);font-size:13.5px;line-height:1.6;max-width:260px;}
+  .foot-col h5{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:16px;}
+  .foot-col a{display:block;color:var(--muted);font-size:13.5px;margin-bottom:11px;}
+  .foot-col a:hover{color:var(--red);}
+  .foot-bottom{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;flex-wrap:wrap;gap:12px;}
+
+  @media(max-width:860px){
+    .pdp{grid-template-columns:1fr;gap:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><img src="images/sdk-logo-badge.png" alt="SDK Masale" style="height:40px;width:auto;display:block;"></div>
+    <ul class="nav-links">
+      <li><a href="sdk-masale-homepage.html">Home</a></li>
+      <li><a href="catalog.html" class="active">Shop All</a></li>
+      <li><a href="sdk-masale-homepage.html#story">Our Story</a></li>
+      <li><a href="sdk-masale-homepage.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="login-link">Login</a>
+      <a href="wishlist.html">Wishlist <span class="cart-dot wishlist-dot">0</span></a>
+      <a href="cart.html">Cart <span class="cart-dot">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<div class="breadcrumb">
+  <a href="sdk-masale-homepage.html">Home</a> &nbsp;/&nbsp; <a href="catalog.html">Shop All</a> &nbsp;/&nbsp; <span id="crumb-name">Product</span>
+</div>
+
+<div class="pdp">
+  <div class="gallery-col">
+    <div class="gallery-main">
+      <span class="sale-badge">Sale</span>
+      <img id="main-img" src="" alt="">
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+  </div>
+
+  <div class="pdp-info">
+    <div class="pdp-cat" id="pdp-cat"></div>
+    <h1 class="pdp-title" id="pdp-title"></h1>
+    <div class="pdp-price" id="pdp-price"></div>
+    <p class="pdp-desc" id="pdp-desc"></p>
+
+    <div class="opt-block" id="size-block">
+      <div class="opt-label">Size</div>
+      <div class="size-row" id="size-row"></div>
+    </div>
+
+    <div class="opt-block">
+      <div class="opt-label">Quantity</div>
+      <div class="qty-row">
+        <div class="qty-stepper">
+          <button id="qty-minus" type="button">–</button>
+          <span id="qty-val">1</span>
+          <button id="qty-plus" type="button">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-add" type="button" id="add-to-cart-btn">Add to Cart</button>
+      <button class="btn-wish" type="button" id="wish-btn" title="Add to wishlist">♡</button>
+    </div>
+
+    <div class="trust-row">
+      <span>100% Natural</span>
+      <span>No Artificial Colours</span>
+      <span>No Preservatives</span>
+      <span>Hygienically Packed</span>
+    </div>
+  </div>
+</div>
+
+<div class="pdp-tabs">
+  <div class="tab-heads">
+    <div class="tab-head active" data-tab="details">Product Details</div>
+    <div class="tab-head" data-tab="shipping">Shipping &amp; Returns</div>
+  </div>
+  <div class="tab-panel active" id="tab-details">
+    <h4 id="tab-title"></h4>
+    <p id="tab-desc-full" style="margin-bottom:16px;"></p>
+    <p><strong style="color:var(--ink);">Ingredients:</strong> <span id="tab-ingredients"></span></p>
+  </div>
+  <div class="tab-panel" id="tab-shipping">
+    <h4>Shipping</h4>
+    <p style="margin-bottom:16px;">All products are shipped within 2–4 days from our warehouse. For full details, see our <a href="policies.html#shipping" style="color:var(--red);">Shipping Policy</a>.</p>
+    <h4>Returns</h4>
+    <p>To be eligible for a return, your item must be unopened and in its original packaging. See our <a href="policies.html#refund" style="color:var(--red);">Refund &amp; Return Policy</a> for details.</p>
+  </div>
+</div>
+
+<footer id="contact">
+  <div class="foot-grid">
+    <div>
+      <div class="foot-logo">SDK <span>Masale</span></div>
+      <p>Swaad Aamcha, Vishwas Tumcha. Authentic Indian spice blends made the traditional way, packed fresh for your kitchen.</p>
+    </div>
+    <div class="foot-col">
+      <h5>Shop</h5>
+      <a href="catalog.html">Shop All</a>
+      <a href="catalog.html#spices">Spices &amp; Masalas</a>
+      <a href="catalog.html#special">Special Products</a>
+      <a href="catalog.html#oils">Cooking Oils</a>
+    </div>
+    <div class="foot-col">
+      <h5>Company</h5>
+      <a href="sdk-masale-homepage.html#story">Our Story</a>
+      <a href="policies.html">Policies</a>
+      <a href="sdk-masale-homepage.html#contact">Contact</a>
+    </div>
+    <div class="foot-col">
+      <h5>Contact</h5>
+      <a href="#">SDK Group of Companies</a>
+      <a href="#">Office No. 309, Unit Chamber, Sector 18, Vashi, Navi Mumbai 400703</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div>© SDK Masale. All Rights Reserved.</div>
+    <div><a href="policies.html">Privacy Policy</a> &nbsp;•&nbsp; <a href="policies.html">Terms of Service</a></div>
+  </div>
+</footer>
+
+<script src="js/products-data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/wishlist.js"></script>
+<script src="js/profile.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  const product = SDK_PRODUCTS.find(p => p.id === id) || SDK_PRODUCTS[0];
+
+  let currentSizeIdx = 0;
+  let currentImg = 'front';
+  let qty = 1;
+
+  function render(){
+    document.getElementById('page-title-tag').textContent = product.name + ' — SDK Masale';
+    document.getElementById('crumb-name').textContent = product.name;
+    document.getElementById('pdp-cat').textContent = product.categoryLabel;
+    document.getElementById('pdp-title').textContent = product.name;
+    document.getElementById('pdp-desc').textContent = product.desc;
+    document.getElementById('tab-title').textContent = product.name;
+    document.getElementById('tab-desc-full').textContent = product.desc;
+    document.getElementById('tab-ingredients').textContent = product.ingredients;
+
+    const wishBtn = document.getElementById('wish-btn');
+    wishBtn.setAttribute('data-wishlist-id', product.id);
+    if (window.SDKWishlist) {
+      window.SDKWishlist.refreshHeartButtons();
+      window.SDKWishlist.wireHeartButtons();
+    }
+
+    const activeSize = product.sizes[currentSizeIdx];
+    document.getElementById('pdp-price').innerHTML =
+      '<s>\u20B9' + activeSize.mrp + '</s>\u20B9' + activeSize.price;
+
+    // Size buttons
+    const sizeBlock = document.getElementById('size-block');
+    const sizeRow = document.getElementById('size-row');
+    sizeRow.innerHTML = '';
+    if (product.sizes.length <= 1) {
+      sizeBlock.style.display = 'none';
+    } else {
+      sizeBlock.style.display = 'block';
+      product.sizes.forEach((s, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'size-btn' + (i === currentSizeIdx ? ' active' : '');
+        btn.type = 'button';
+        btn.textContent = s.label;
+        btn.addEventListener('click', () => {
+          currentSizeIdx = i;
+          currentImg = 'front';
+          render();
+        });
+        sizeRow.appendChild(btn);
+      });
+    }
+
+    renderGallery();
+    document.getElementById('qty-val').textContent = qty;
+  }
+
+  function renderGallery(){
+    const size = product.sizes[currentSizeIdx];
+    const mainImg = document.getElementById('main-img');
+    mainImg.src = currentImg === 'front' ? size.front : (size.back || size.front);
+    mainImg.alt = product.name + ' - ' + size.label;
+
+    const thumbs = document.getElementById('thumbs');
+    thumbs.innerHTML = '';
+    const shots = [{ key: 'front', src: size.front }];
+    if (size.back) shots.push({ key: 'back', src: size.back });
+
+    if (shots.length <= 1) { thumbs.style.display = 'none'; return; }
+    thumbs.style.display = 'flex';
+
+    shots.forEach(shot => {
+      const div = document.createElement('div');
+      div.className = 'thumb' + (currentImg === shot.key ? ' active' : '');
+      const img = document.createElement('img');
+      img.src = shot.src;
+      img.alt = shot.key;
+      div.appendChild(img);
+      div.addEventListener('click', () => {
+        currentImg = shot.key;
+        renderGallery();
+      });
+      thumbs.appendChild(div);
+    });
+  }
+
+  document.getElementById('qty-minus').addEventListener('click', () => {
+    if (qty > 1) { qty--; document.getElementById('qty-val').textContent = qty; }
+  });
+  document.getElementById('qty-plus').addEventListener('click', () => {
+    qty++; document.getElementById('qty-val').textContent = qty;
+  });
+
+  document.querySelectorAll('.tab-head').forEach(head => {
+    head.addEventListener('click', () => {
+      document.querySelectorAll('.tab-head').forEach(h => h.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      head.classList.add('active');
+      document.getElementById('tab-' + head.dataset.tab).classList.add('active');
+    });
+  });
+
+  render();
+
+  document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+    const size = product.sizes[currentSizeIdx];
+    window.SDKCart.addToCart({
+      id: product.id,
+      name: product.name,
+      sizeKey: size.key,
+      sizeLabel: size.label,
+      price: size.price,
+      mrp: size.mrp,
+      image: size.front,
+      qty: qty
+    });
+  });
+</script>
+
+</body>
+</html>

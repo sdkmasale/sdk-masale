@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDK Masale — Swad Aamcha, Vishwas Tumcha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3E8;
+    --cream-2: #F3E6D6;
+    --card: #FFFFFF;
+    --ink: #221912;
+    --muted: #6B5E52;
+    --red: #A32418;
+    --red-dark: #7E1B12;
+    --leaf: #4C6B39;
+    --gold: #C99A3E;
+    --line: rgba(34,25,18,0.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(251,243,232,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1180px;margin:0 auto;}
+  .logo{font-family:'Fraunces',serif;font-weight:700;font-size:21px;letter-spacing:0.3px;color:var(--ink);}
+  .logo span{color:var(--red);}
+  .nav-links{display:flex;gap:36px;list-style:none;font-size:13.5px;letter-spacing:0.3px;text-transform:uppercase;font-weight:500;}
+  .nav-links a{opacity:0.8;transition:opacity .2s;color:var(--ink);}
+  .nav-links a:hover{opacity:1;color:var(--red);}
+  .nav-actions{display:flex;align-items:center;gap:22px;font-size:13px;color:var(--ink);}
+  .cart-dot{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;overflow:hidden;
+    padding:100px 32px 90px;
+  }
+  .hero-blob{
+    position:absolute;top:-120px;right:-160px;width:620px;height:620px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #F2D9C4, #EFC9AE 55%, transparent 75%);
+    opacity:0.85; z-index:0;
+  }
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--red);margin-bottom:20px;display:flex;align-items:center;gap:9px;font-weight:500;
+  }
+  .eyebrow .leaf{color:var(--leaf);font-size:15px;}
+  .hero h1{
+    font-family:'Fraunces',serif;
+    font-size:clamp(42px,5.6vw,66px);
+    font-weight:700;
+    line-height:1.04;
+    letter-spacing:-0.5px;
+    color:var(--ink);
+    max-width:720px;
+  }
+  .hero h1 .accent{color:var(--red);display:block;}
+  .hero p.lede{
+    margin-top:26px;font-size:16.5px;line-height:1.6;color:var(--muted);max-width:440px;
+  }
+  .hero-cta{display:flex;gap:16px;margin-top:36px;}
+  .btn{
+    font-family:'Work Sans',sans-serif;font-weight:600;font-size:14px;
+    padding:15px 28px;border-radius:6px;letter-spacing:0.2px;
+    transition:transform .18s ease, box-shadow .18s ease;
+    display:inline-block;
+  }
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(163,36,24,0.28);}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink);background:var(--card);}
+  .btn-ghost:hover{border-color:var(--red);color:var(--red);}
+
+  /* ---------- SECTION LABELS ---------- */
+  .section{padding:76px 0;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:16px;}
+  .section-num{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--red);
+    letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:block;font-weight:500;
+  }
+  .section-head h2{font-family:'Fraunces',serif;font-size:33px;font-weight:700;letter-spacing:-0.3px;color:var(--ink);}
+  .section-head p{color:var(--muted);font-size:14.5px;max-width:300px;}
+
+  /* ---------- CATEGORY GRID ---------- */
+  .cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .cat-card{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:28px 24px;min-height:170px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    position:relative;overflow:hidden;transition:box-shadow .25s ease, transform .25s ease;
+  }
+  .cat-card:hover{box-shadow:0 14px 30px rgba(34,25,18,0.08);transform:translateY(-3px);}
+  .cat-swatch{width:32px;height:6px;border-radius:3px;margin-bottom:22px;}
+  .cat-card h3{font-family:'Fraunces',serif;font-size:18.5px;font-weight:600;margin-bottom:6px;color:var(--ink);}
+  .cat-card span.count{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+  .cat-arrow{position:absolute;top:26px;right:22px;font-size:16px;color:var(--muted);transition:transform .2s,color .2s;}
+  .cat-card:hover .cat-arrow{transform:translate(3px,-3px);color:var(--red);}
+
+  /* ---------- PRODUCT GRID ---------- */
+  .prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  .prod-card-link{display:block;}
+  .prod-card{display:flex;flex-direction:column;}
+  .prod-img{
+    aspect-ratio:1/1.05;border-radius:10px;margin-bottom:16px;position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-style:italic;
+    color:rgba(34,25,18,0.35);font-size:14px;border:1px solid var(--line);
+    background:var(--cream-2);padding:8px;
+  }
+  .prod-img img{position:relative;z-index:1;max-width:94%;max-height:96%;width:auto;height:auto;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(34,25,18,0.12));}
+  .prod-img::after{content:'';position:absolute;bottom:6%;left:50%;transform:translateX(-50%);width:70%;height:10%;background:radial-gradient(ellipse at center, rgba(34,25,18,0.08) 0%, rgba(34,25,18,0.02) 70%, transparent 100%);border-radius:50%;z-index:1;}
+  .wish-heart{position:absolute;top:10px;right:10px;z-index:6;width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--muted);cursor:pointer;}
+  .wish-heart:hover{border-color:var(--red);color:var(--red);}
+  .wish-heart.wishlisted{color:var(--red);border-color:var(--red);}
+  .prod-tag{
+    position:absolute;top:12px;left:12px;z-index:5;background:var(--ink);color:var(--cream);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;padding:4px 9px;border-radius:4px;letter-spacing:0.5px;text-transform:uppercase;
+  }
+  .prod-card h4{font-size:14.5px;font-weight:500;margin-bottom:6px;line-height:1.35;color:var(--ink);}
+  .prod-price{font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:var(--red-dark);font-weight:500;display:flex;align-items:center;gap:8px;}
+  .prod-price s{color:var(--muted);margin-right:0;font-size:12px;}
+  .off-tag{background:var(--cream-2);color:var(--red);font-size:9.5px;padding:2px 6px;border-radius:4px;letter-spacing:0.3px;font-weight:600;}
+
+  /* ---------- STORY ---------- */
+  .story{
+    background:var(--cream-2);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .story-inner{display:grid;grid-template-columns:0.9fr 1.1fr;gap:70px;align-items:center;padding:80px 0;}
+  .story-mark{
+    font-family:'Fraunces',serif;font-size:110px;line-height:1;color:var(--red);opacity:0.85;font-weight:700;
+  }
+  .story h2{font-family:'Fraunces',serif;font-size:30px;font-weight:700;margin-bottom:18px;line-height:1.16;color:var(--ink);}
+  .story p{color:var(--muted);line-height:1.7;font-size:15px;margin-bottom:16px;max-width:520px;}
+  .story .tagline{font-family:'Fraunces',serif;font-style:italic;color:var(--red-dark);font-size:19px;margin-top:20px;}
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testi-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .testi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:32px 28px;}
+  .testi .stars{color:var(--gold);font-size:13px;letter-spacing:2px;margin-bottom:16px;}
+  .testi p{font-size:14.5px;line-height:1.7;color:var(--muted);margin-bottom:18px;}
+  .testi .who{font-family:'IBM Plex Mono',monospace;font-size:11.5px;text-transform:uppercase;letter-spacing:0.5px;color:var(--ink);}
+
+  /* ---------- NEWSLETTER ---------- */
+  .news{
+    padding:86px 32px;text-align:center;
+    background:var(--ink);color:var(--cream);
+  }
+  .news h2{font-family:'Fraunces',serif;font-size:32px;margin-bottom:14px;color:#fff;}
+  .news p{color:rgba(251,243,232,0.65);margin-bottom:28px;font-size:15px;}
+  .news-form{display:flex;justify-content:center;gap:0;max-width:420px;margin:0 auto;}
+  .news-form input{
+    flex:1;padding:15px 18px;border:1px solid rgba(251,243,232,0.25);background:transparent;color:#fff;
+    font-family:'Work Sans',sans-serif;font-size:14px;border-radius:6px 0 0 6px;
+  }
+  .news-form input::placeholder{color:rgba(251,243,232,0.5);}
+  .news-form button{border-radius:0 6px 6px 0;border:none;cursor:pointer;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:56px 32px 36px;background:var(--cream);}
+  .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:44px;}
+  .foot-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:14px;color:var(--ink);}
+  .foot-logo span{color:var(--red);}
+  footer p{color:var(--muted);font-size:13.5px;line-height:1.6;max-width:260px;}
+  .foot-col h5{font-family:'IBM Plex Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:16px;}
+  .foot-col a{display:block;color:var(--muted);font-size:13.5px;margin-bottom:11px;transition:color .2s;}
+  .foot-col a:hover{color:var(--red);}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;flex-wrap:wrap;gap:12px;}
+
+  @media(max-width:860px){
+    .nav-links{display:none;}
+    .hero{padding-top:56px;}
+    .hero-blob{width:400px;height:400px;top:-80px;right:-140px;}
+    .cat-grid{grid-template-columns:repeat(2,1fr);}
+    .prod-grid{grid-template-columns:repeat(2,1fr);}
+    .story-inner{grid-template-columns:1fr;gap:24px;padding:56px 0;}
+    .story-mark{font-size:64px;}
+    .testi-strip{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><img src="images/sdk-logo-badge.png" alt="SDK Masale" style="height:44px;width:auto;display:block;"></div>
+    <ul class="nav-links">
+      <li><a href="catalog.html">Our Range</a></li>
+      <li><a href="catalog.html">Shop</a></li>
+      <li><a href="#story">Our Story</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="login-link">Login</a>
+      <a href="wishlist.html">Wishlist <span class="cart-dot wishlist-dot">0</span></a>
+      <a href="cart.html">Cart <span class="cart-dot">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-blob"></div>
+  <div class="hero-inner">
+    <span class="eyebrow"><span class="leaf">🌿</span> SDK MASALE</span>
+    <h1>Swad Aamcha,<span class="accent">Vishwas Tumcha</span></h1>
+    <p class="lede">Authentic Indian masalas made with carefully selected spices — the same recipes, the same trust, since our very first batch.</p>
+    <div class="hero-cta">
+      <a href="#categories" class="btn btn-primary">Shop by Category</a>
+      <a href="#contact" class="btn btn-ghost">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="categories">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">Our Range</span>
+        <h2>Seven shelves, one pantry.</h2>
+      </div>
+      <p>Every jar sorted by what it actually is — no generic "spice mix" labels.</p>
+    </div>
+    <div class="cat-grid">
+      <a href="catalog.html#spices" class="cat-card"><div><div class="cat-swatch" style="background:var(--gold)"></div><h3>Spices &amp; Masalas</h3><span class="count">7 products</span></div><span class="cat-arrow">↗</span></a>
+      <a href="catalog.html#special" class="cat-card"><div><div class="cat-swatch" style="background:var(--red)"></div><h3>Special Products</h3><span class="count">11 products</span></div><span class="cat-arrow">↗</span></a>
+      <a href="catalog.html#oils" class="cat-card"><div><div class="cat-swatch" style="background:#D9B23C"></div><h3>Cooking Oils</h3><span class="count">5 products</span></div><span class="cat-arrow">↗</span></a>
+      <a href="catalog.html#special" class="cat-card"><div><div class="cat-swatch" style="background:var(--leaf)"></div><h3>Chutneys &amp; Pastes</h3><span class="count">Coming soon</span></div><span class="cat-arrow">↗</span></a>
+      <a href="catalog.html#spices" class="cat-card"><div><div class="cat-swatch" style="background:#8a4a2e"></div><h3>Pickles &amp; Achar</h3><span class="count">Coming soon</span></div><span class="cat-arrow">↗</span></a>
+      <a href="catalog.html#special" class="cat-card"><div><div class="cat-swatch" style="background:var(--gold)"></div><h3>Biryani Range</h3><span class="count">3 products</span></div><span class="cat-arrow">↗</span></a>
+      <a href="catalog.html#special" class="cat-card"><div><div class="cat-swatch" style="background:#c15b3a"></div><h3>Chicken &amp; Kebab Masalas</h3><span class="count">Coming soon</span></div><span class="cat-arrow">↗</span></a>
+      <a href="catalog.html" class="cat-card"><div><div class="cat-swatch" style="background:var(--red)"></div><h3>Gift Hampers</h3><span class="count">Coming soon</span></div><span class="cat-arrow">↗</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="bestsellers">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">Bestsellers</span>
+        <h2>What everyone reorders.</h2>
+      </div>
+      <p>Straight from our master price list — the ones that move fastest.</p>
+    </div>
+    <div class="prod-grid">
+      <a href="product.html?id=malvani-mix-masala" class="prod-card-link">
+      <div class="prod-card">
+        <div class="prod-img"><button class="wish-heart" type="button" data-wishlist-id="malvani-mix-masala" title="Add to wishlist">&#9825;</button><span class="prod-tag">Bestseller</span><img src="images/malvani-mix-masala-front-nobg.png" alt="Malvani Mix Masala"></div>
+        <h4>Malvani Mix Masala, 200g</h4>
+        <div class="prod-price"><s>₹210</s>₹168<span class="off-tag">20% OFF</span></div>
+      </div>
+      </a>
+      <a href="product.html?id=chicken-masala" class="prod-card-link">
+      <div class="prod-card">
+        <div class="prod-img"><button class="wish-heart" type="button" data-wishlist-id="chicken-masala" title="Add to wishlist">&#9825;</button><span class="prod-tag">Popular</span><img src="images/chicken-masala-front-nobg.png" alt="Chicken Masala"></div>
+        <h4>Chicken Masala, 1kg</h4>
+        <div class="prod-price"><s>₹620</s>₹496<span class="off-tag">20% OFF</span></div>
+      </div>
+      </a>
+      <a href="product.html?id=mustard-oil" class="prod-card-link">
+      <div class="prod-card">
+        <div class="prod-img"><button class="wish-heart" type="button" data-wishlist-id="mustard-oil" title="Add to wishlist">&#9825;</button><img src="images/mustard-oil-front-nobg.png" alt="Mustard Oil"></div>
+        <h4>Mustard Oil, 1 Litre</h4>
+        <div class="prod-price"><s>₹399</s>₹319<span class="off-tag">20% OFF</span></div>
+      </div>
+      </a>
+      <a href="product.html?id=chaat-masala" class="prod-card-link">
+      <div class="prod-card">
+        <div class="prod-img"><button class="wish-heart" type="button" data-wishlist-id="chaat-masala" title="Add to wishlist">&#9825;</button><span class="prod-tag">Everyday</span><img src="images/chaat-masala-1kg-front.jpeg" alt="Chaat Masala"></div>
+        <h4>Chaat Masala, 200g</h4>
+        <div class="prod-price"><s>₹190</s>₹152<span class="off-tag">20% OFF</span></div>
+      </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="story" id="story">
+  <div class="wrap story-inner">
+    <div class="story-mark">”</div>
+    <div>
+      <h2>Started at one stove.<br>Still tastes like it.</h2>
+      <p>SDK Masale began in a single kitchen, grinding spices in small batches for neighbours who missed home. Years on, we still grind the same way — no shortcuts, no fillers, no compromise on the grade of chilli or the freshness of the grind.</p>
+      <p>Every recipe on this site is one we'd actually cook from ourselves. That's the only quality bar we've ever used.</p>
+      <p class="tagline">"Swad Aamcha, Vishwas Tumcha." — Our taste, your trust.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-num">In Their Words</span>
+        <h2>From kitchens like yours.</h2>
+      </div>
+    </div>
+    <div class="testi-strip">
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <p>The garam masala tastes exactly like what my grandmother used to hand-grind. I haven't bought a store-brand mix since.</p>
+        <div class="who">— Verified Customer</div>
+      </div>
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <p>Ordered the mango pickle on a whim and now it's a monthly standing order. The sourness is exactly right.</p>
+        <div class="who">— Verified Customer</div>
+      </div>
+      <div class="testi">
+        <div class="stars">★★★★★</div>
+        <p>Fast shipping, careful packaging, and the turmeric is a completely different colour from what I was using before.</p>
+        <div class="who">— Verified Customer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="news">
+  <h2>Get 10% off your first jar.</h2>
+  <p>One email a month. New batches, restocks, and nothing else.</p>
+  <div class="news-form">
+    <input type="email" placeholder="you@email.com">
+    <button class="btn btn-primary">Subscribe</button>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo"><img src="images/sdk-logo-badge.png" alt="SDK Masale" style="height:56px;width:auto;display:block;margin-bottom:10px;"></div>
+        <p>Authentic Indian masalas, spices and cold-pressed oils made with carefully selected ingredients.</p>
+        <p style="margin-top:14px;">Office No. 309, Punit Chamber,<br>Sector 18, Vashi, Navi Mumbai 400703</p>
+      </div>
+      <div class="foot-col">
+        <h5>Shop</h5>
+        <a href="#">Spices &amp; Masalas</a>
+        <a href="#">Special Products</a>
+        <a href="#">Cooking Oils</a>
+        <a href="#">Biryani Range</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#">Our Story</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Wholesale Enquiries</a>
+        <a href="policies.html#shipping">Shipping Policy</a>
+        <a href="policies.html#refund">Refund Policy</a>
+        <a href="policies.html#privacy">Privacy Policy</a>
+        <a href="policies.html#terms">Terms of Service</a>
+      </div>
+      <div class="foot-col">
+        <h5>Get in Touch</h5>
+        <a href="tel:+919619375636">+91 96193 75636</a>
+        <a href="mailto:masalesdk@gmail.com">masalesdk@gmail.com</a>
+        <a href="https://instagram.com/_sdk_masale" target="_blank">Instagram @_sdk_masale</a>
+        <a href="#" target="_blank">Facebook: Santosh Nalawade</a>
+        <a href="#" target="_blank">WhatsApp Channel: SDK Masale</a>
+        <a href="#" target="_blank">YouTube: SDK Masale</a>
+        <a href="#">GSTN: 27BAUPN6392M1ZL</a>
+        <a href="#">FSSAI: 215256016001136</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 SDK Masale. All rights reserved.</span>
+      <span>Made in India</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/cart.js"></script>
+<script src="js/wishlist.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

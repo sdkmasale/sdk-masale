@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Wishlist — SDK Masale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream: #FBF3E8; --cream-2: #F3E6D6; --card: #FFFFFF; --ink: #221912; --muted: #6B5E52;
+    --red: #A32418; --red-dark: #7E1B12; --leaf: #4C6B39; --gold: #C99A3E; --line: rgba(34,25,18,0.10);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--cream);color:var(--ink);font-family:'Work Sans', sans-serif;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(251,243,232,0.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1300px;margin:0 auto;}
+  .logo img{height:40px;width:auto;display:block;}
+  .nav-links{display:flex;gap:34px;list-style:none;font-size:13.5px;letter-spacing:0.3px;text-transform:uppercase;font-weight:500;}
+  .nav-links a{opacity:0.8;transition:opacity .2s;}
+  .nav-links a:hover{opacity:1;color:var(--red);}
+  .nav-actions{display:flex;align-items:center;gap:20px;font-size:13px;}
+  .cart-dot{background:var(--red);color:#fff;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-family:'IBM Plex Mono',monospace;}
+
+  .breadcrumb{padding:18px 32px;max-width:1300px;margin:0 auto;font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+  .page-title{text-align:center;font-family:'Fraunces',serif;font-size:32px;font-weight:700;margin:8px 0 40px;}
+
+  .wish-wrap{max-width:1180px;margin:0 auto;padding:0 32px 100px;}
+  .wish-empty{text-align:center;padding:80px 20px;color:var(--muted);}
+  .wish-empty a{color:var(--red);font-weight:600;text-decoration:underline;}
+
+  .wish-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:22px;}
+  .wcard{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  .wcard-img{aspect-ratio:1/1.05;position:relative;background:var(--cream-2);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:8px;}
+  .wcard-img img{max-width:94%;max-height:96%;object-fit:contain;filter:drop-shadow(0 8px 12px rgba(34,25,18,0.12));}
+  .wcard-remove{position:absolute;top:10px;right:10px;z-index:5;width:30px;height:30px;border-radius:50%;background:#fff;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--red);cursor:pointer;}
+  .wcard-body{padding:14px 16px 18px;}
+  .wcard-body h4{font-family:'Work Sans',sans-serif;font-size:14.5px;font-weight:600;margin-bottom:6px;}
+  .wcard-price{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);margin-bottom:12px;}
+  .wcard-price s{margin-right:6px;}
+  .wcard-price b{color:var(--red-dark);}
+  .wcard-add{width:100%;padding:10px;background:var(--red);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;}
+  .wcard-add:hover{background:var(--red-dark);}
+
+  .wish-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;
+    padding:12px 20px;border-radius:8px;font-size:13.5px;z-index:250;opacity:0;pointer-events:none;transition:all .25s ease;}
+  .wish-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  footer{padding:40px 32px 36px;border-top:1px solid var(--line);margin-top:20px;}
+  .foot-bottom{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);font-family:'IBM Plex Mono',monospace;flex-wrap:wrap;gap:12px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="logo"><img src="images/sdk-logo-badge.png" alt="SDK Masale"></div>
+    <ul class="nav-links">
+      <li><a href="sdk-masale-homepage.html">Home</a></li>
+      <li><a href="catalog.html">Shop All</a></li>
+      <li><a href="sdk-masale-homepage.html#story">Our Story</a></li>
+      <li><a href="sdk-masale-homepage.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="#" class="login-link">Login</a>
+      <a href="wishlist.html">Wishlist <span class="cart-dot wishlist-dot">0</span></a>
+      <a href="cart.html">Cart <span class="cart-dot">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<div class="breadcrumb"><a href="sdk-masale-homepage.html">Home</a> &nbsp;/&nbsp; <span>Wishlist</span></div>
+<h1 class="page-title">Your Wishlist</h1>
+
+<div class="wish-wrap">
+  <div id="wish-grid" class="wish-grid"></div>
+</div>
+
+<div class="wish-toast" id="wish-toast"></div>
+
+<footer>
+  <div class="foot-bottom">
+    <div>© SDK Masale. All Rights Reserved.</div>
+    <div><a href="policies.html">Privacy Policy</a> &nbsp;•&nbsp; <a href="policies.html">Terms of Service</a></div>
+  </div>
+</footer>
+
+<script src="js/products-data.js"></script>
+<script>
+  const WISH_KEY = 'sdk_wishlist';
+  const CART_KEY = 'sdk_cart';
+
+  function getWishlist() {
+    try { return JSON.parse(localStorage.getItem(WISH_KEY)) || []; }
+    catch (e) { return []; }
+  }
+  function saveWishlist(list) {
+    localStorage.setItem(WISH_KEY, JSON.stringify(list));
+    document.querySelectorAll('.wishlist-dot').forEach(el => { el.textContent = list.length; });
+  }
+  function removeFromWishlist(id) {
+    saveWishlist(getWishlist().filter(x => x !== id));
+    render();
+  }
+
+  function getCart() {
+    try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+    catch (e) { return []; }
+  }
+  function addToCart(item) {
+    const cart = getCart();
+    const existing = cart.find(c => c.id === item.id && c.sizeKey === item.sizeKey);
+    if (existing) existing.qty += item.qty;
+    else cart.push(item);
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    document.querySelectorAll('.cart-dot:not(.wishlist-dot)').forEach(el => {
+      el.textContent = cart.reduce((n, i) => n + i.qty, 0);
+    });
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('wish-toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }
+
+  function render() {
+    const ids = getWishlist();
+    const grid = document.getElementById('wish-grid');
+
+    if (ids.length === 0) {
+      grid.innerHTML = '<div class="wish-empty" style="grid-column:1/-1;">Your wishlist is empty. <a href="catalog.html">Browse products &rarr;</a></div>';
+      return;
+    }
+
+    const items = ids.map(id => SDK_PRODUCTS.find(p => p.id === id)).filter(Boolean);
+
+    grid.innerHTML = items.map(product => {
+      const size = product.sizes[0];
+      return `
+        <div class="wcard">
+          <div class="wcard-img">
+            <button class="wcard-remove" type="button" data-remove="${product.id}" title="Remove">&times;</button>
+            <img src="${size.front}" alt="${product.name}">
+          </div>
+          <div class="wcard-body">
+            <h4>${product.name}</h4>
+            <div class="wcard-price"><s>₹${size.mrp}</s> <b>₹${size.price}</b></div>
+            <button class="wcard-add" type="button" data-add="${product.id}">Add to Cart</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    grid.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', () => removeFromWishlist(btn.dataset.remove));
+    });
+    grid.querySelectorAll('[data-add]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const product = items.find(p => p.id === btn.dataset.add);
+        const size = product.sizes[0];
+        addToCart({
+          id: product.id, name: product.name, sizeKey: size.key, sizeLabel: size.label,
+          price: size.price, mrp: size.mrp, image: size.front, qty: 1
+        });
+        showToast('Added to cart');
+      });
+    });
+  }
+
+  document.querySelectorAll('.wishlist-dot').forEach(el => { el.textContent = getWishlist().length; });
+  document.querySelectorAll('.cart-dot:not(.wishlist-dot)').forEach(el => {
+    el.textContent = getCart().reduce((n, i) => n + i.qty, 0);
+  });
+
+  render();
+</script>
+<script src="js/profile.js"></script>
+
+</body>
+</html>
