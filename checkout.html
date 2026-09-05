@@ -302,6 +302,8 @@
     return true;
   }
 
+  const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzU-gLhmuq_oEz7hL7zI5bcW9lVbTYyNx9BcWCUvIFAo6dpiAU9wjPvk7v86j2cujyd/exec';
+
   function logOrder() {
     const cart = getCart();
     const firstName = document.getElementById('f-firstname').value.trim();
@@ -328,6 +330,14 @@
     try { orders = JSON.parse(localStorage.getItem('sdk_orders')) || []; } catch (e) { orders = []; }
     orders.unshift(order);
     localStorage.setItem('sdk_orders', JSON.stringify(orders));
+
+    // Also send to Google Sheet so orders sync across devices, not just this browser.
+    fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(order)
+    }).catch(() => {});
   }
 
   document.getElementById('pay-now-btn').addEventListener('click', () => {
