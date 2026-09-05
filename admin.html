@@ -174,6 +174,19 @@
         <tbody id="products-tbody"></tbody>
       </table>
     </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Customers</h3>
+        <span style="font-size:12px;color:var(--muted);">Built from orders placed on this device</span>
+      </div>
+      <table>
+        <thead><tr><th>Customer</th><th>Phone</th><th>Address</th><th>Orders</th><th>Total Spent</th></tr></thead>
+        <tbody id="customers-tbody">
+          <tr><td colspan="5" style="color:var(--muted);padding:20px 0;">No customers yet — they'll appear here once orders are placed via WhatsApp checkout on this device.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </main>
 </div>
 
@@ -237,16 +250,56 @@
     }).join('');
   }
 
+  function renderCustomers() {
+    const orders = getOrders();
+    const tbody = document.getElementById('customers-tbody');
+
+    if (orders.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="color:var(--muted);padding:20px 0;">No customers yet — they\'ll appear here once orders are placed via WhatsApp checkout on this device.</td></tr>';
+      return;
+    }
+
+    const customerMap = {};
+    orders.forEach(o => {
+      const key = (o.phone || o.customer || 'unknown').trim();
+      if (!customerMap[key]) {
+        customerMap[key] = {
+          name: o.customer || '—',
+          phone: o.phone || '—',
+          address: o.address || '—',
+          orderCount: 0,
+          totalSpent: 0
+        };
+      }
+      customerMap[key].orderCount += 1;
+      customerMap[key].totalSpent += o.total;
+    });
+
+    const customers = Object.values(customerMap).sort((a, b) => b.totalSpent - a.totalSpent);
+
+    tbody.innerHTML = customers.map(c => `
+      <tr>
+        <td>${c.name}</td>
+        <td>${c.phone}</td>
+        <td style="max-width:220px;">${c.address}</td>
+        <td>${c.orderCount}</td>
+        <td class="amt">₹${c.totalSpent.toLocaleString('en-IN')}</td>
+      </tr>
+    `).join('');
+  }
+
   document.getElementById('clear-orders-link').addEventListener('click', (e) => {
     e.preventDefault();
     localStorage.removeItem('sdk_orders');
     renderKPIs();
     renderOrders();
+    renderCustomers();
   });
 
   renderKPIs();
   renderOrders();
   renderProducts();
+  renderCustomers();
 </script>
 
 </body>
