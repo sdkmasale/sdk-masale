@@ -12,6 +12,7 @@
     --red:#A32418; --green:#4C6B39; --gold:#C99A3E; --sidebar:#221912; --sidebar-2:#332619;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
   body{background:var(--bg);color:var(--ink);font-family:'Work Sans',sans-serif;-webkit-font-smoothing:antialiased;}
   a{color:inherit;text-decoration:none;}
 
@@ -87,15 +88,15 @@
     <div class="sb-logo">SDK <span>MASALE</span><span class="sb-tag">Operator Panel</span></div>
     <nav class="sb-nav">
       <a href="#" class="sb-link active"><span class="ic">▦</span> Dashboard</a>
-      <a href="#" class="sb-link"><span class="ic">▤</span> Orders</a>
-      <a href="#" class="sb-link"><span class="ic">◈</span> Products</a>
-      <a href="#" class="sb-link"><span class="ic">◎</span> Customers</a>
-      <a href="#" class="sb-link"><span class="ic">▥</span> Inventory</a>
-      <a href="#" class="sb-link"><span class="ic">◫</span> Discounts</a>
+      <a href="#orders-section" class="sb-link"><span class="ic">▤</span> Orders</a>
+      <a href="#products-section" class="sb-link"><span class="ic">◈</span> Products</a>
+      <a href="#customers-section" class="sb-link"><span class="ic">◎</span> Customers</a>
+      <a href="#inventory-section" class="sb-link"><span class="ic">▥</span> Inventory</a>
+      <a href="#" class="sb-link" title="Not built yet"><span class="ic">◫</span> Discounts</a>
       <span class="sb-section-label">Store</span>
-      <a href="#" class="sb-link"><span class="ic">✎</span> Storefront Editor</a>
+      <a href="#" class="sb-link" title="Not built yet"><span class="ic">✎</span> Storefront Editor</a>
       <a href="sdk-masale-homepage.html" class="sb-link"><span class="ic">↗</span> View Live Site</a>
-      <a href="#" class="sb-link"><span class="ic">⚙</span> Settings</a>
+      <a href="#" class="sb-link" title="Not built yet"><span class="ic">⚙</span> Settings</a>
     </nav>
     <div class="sb-foot">Logged in as<br><b style="color:#F1E9DC;">Santosh Nalawade</b></div>
   </aside>
@@ -141,7 +142,7 @@
     </div>
 
     <div class="grid-2">
-      <div class="panel">
+      <div class="panel" id="orders-section">
         <div class="panel-head">
           <h3>Recent Orders</h3>
           <a href="#" id="clear-orders-link">Clear log</a>
@@ -154,7 +155,7 @@
         </table>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="inventory-section">
         <div class="panel-head">
           <h3>Inventory</h3>
         </div>
@@ -164,7 +165,7 @@
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel" id="products-section">
       <div class="panel-head">
         <h3>Manage Products</h3>
         <span style="font-size:12px;color:var(--muted);">23 products, read-only preview</span>
@@ -175,7 +176,7 @@
       </table>
     </div>
 
-    <div class="panel">
+    <div class="panel" id="customers-section">
       <div class="panel-head">
         <h3>Customers</h3>
         <span style="font-size:12px;color:var(--muted);">Built from orders placed on this device</span>
