@@ -13,9 +13,9 @@ const SDK_PRODUCTS = [
     desc: "A bold Maharashtrian onion-garlic masala that forms the base of everyday sabzis, curries and dals. Roasted and ground the traditional way for a deep, earthy aroma.",
     ingredients: "Onion, Garlic, Red Chilli, Coriander, Cumin, Sesame, Coconut, Salt & Spices",
     sizes: [
-      { key: "1kg", label: "1 kg", mrp: 790, price: 632, front: "images/kanda-lasun-masala-front-nobg.png", back: null },
-      { key: "500g", label: "500 g", mrp: 400, price: 320, front: "images/kanda-lasun-masala-front-nobg.png", back: null },
-      { key: "200g", label: "200 g", mrp: 200, price: 160, front: "images/kanda-lasun-masala-front-nobg.png", back: null }
+      { key: "1kg", label: "1 kg", mrp: 790, price: 632, front: "images/kanda-lasun-masala-1kg-front.jpeg", back: "images/kanda-lasun-masala-1kg-back.jpeg" },
+      { key: "500g", label: "500 g", mrp: 400, price: 320, front: "images/kanda-lasun-masala-500g-front.png", back: "images/kanda-lasun-masala-500g-back.png" },
+      { key: "200g", label: "200 g", mrp: 200, price: 160, front: "images/kanda-lasun-masala-200g-front.png", back: "images/kanda-lasun-masala-200g-back.png" }
     ]
   },
   {
@@ -39,9 +39,9 @@ const SDK_PRODUCTS = [
     desc: "Pure, finely ground coriander seed with a mild, citrusy warmth — an everyday essential for thickening and flavouring gravies.",
     ingredients: "100% Coriander Seeds",
     sizes: [
-      { key: "1kg", label: "1 kg", mrp: 550, price: 440, front: "images/coriander-powder-front-nobg.png", back: null },
-      { key: "500g", label: "500 g", mrp: 280, price: 224, front: "images/coriander-powder-front-nobg.png", back: null },
-      { key: "200g", label: "200 g", mrp: 190, price: 152, front: "images/coriander-powder-front-nobg.png", back: null }
+      { key: "1kg", label: "1 kg", mrp: 550, price: 440, front: "images/coriander-powder-1kg-front.png", back: "images/coriander-powder-1kg-back.png" },
+      { key: "500g", label: "500 g", mrp: 280, price: 224, front: "images/coriander-powder-500g-front.png", back: "images/coriander-powder-500g-back.png" },
+      { key: "200g", label: "200 g", mrp: 190, price: 152, front: "images/coriander-powder-200g-front.png", back: "images/coriander-powder-200g-back.png" }
     ]
   },
   {
@@ -52,9 +52,9 @@ const SDK_PRODUCTS = [
     desc: "Vibrant red chilli powder with balanced heat and colour, sun-dried and stone-ground for everyday cooking.",
     ingredients: "100% Red Chillies",
     sizes: [
-      { key: "1kg", label: "1 kg", mrp: 550, price: 440, front: "images/chili-powder-front-nobg.png", back: null },
-      { key: "500g", label: "500 g", mrp: 280, price: 224, front: "images/chili-powder-front-nobg.png", back: null },
-      { key: "200g", label: "200 g", mrp: 190, price: 152, front: "images/chili-powder-front-nobg.png", back: null }
+      { key: "1kg", label: "1 kg", mrp: 550, price: 440, front: "images/chili-powder-1kg-front.jpeg", back: "images/chili-powder-1kg-back.jpeg" },
+      { key: "500g", label: "500 g", mrp: 280, price: 224, front: "images/chili-powder-500g-front.png", back: "images/chili-powder-500g-back.png" },
+      { key: "200g", label: "200 g", mrp: 190, price: 152, front: "images/chili-powder-200g-front.jpeg", back: "images/chili-powder-200g-back.jpeg" }
     ]
   },
   {
@@ -65,9 +65,9 @@ const SDK_PRODUCTS = [
     desc: "Prized for its deep red colour and gentle heat, Kashmiri mirchi powder brings restaurant-style colour to curries without overpowering spice.",
     ingredients: "100% Kashmiri Red Chillies",
     sizes: [
-      { key: "1kg", label: "1 kg", mrp: 830, price: 664, front: "images/kashmiri-mirchi-powder-front-nobg.png", back: null },
-      { key: "500g", label: "500 g", mrp: 380, price: 304, front: "images/kashmiri-mirchi-powder-front-nobg.png", back: null },
-      { key: "200g", label: "200 g", mrp: 260, price: 208, front: "images/kashmiri-mirchi-powder-front-nobg.png", back: null }
+      { key: "1kg", label: "1 kg", mrp: 830, price: 664, front: "images/kashmiri-mirchi-powder-1kg-front.png", back: "images/kashmiri-mirchi-powder-1kg-back.png" },
+      { key: "500g", label: "500 g", mrp: 380, price: 304, front: "images/kashmiri-mirchi-powder-500g-front.png", back: "images/kashmiri-mirchi-powder-500g-back.png" },
+      { key: "200g", label: "200 g", mrp: 260, price: 208, front: "images/kashmiri-mirchi-powder-200g-front.png", back: "images/kashmiri-mirchi-powder-200g-back.png" }
     ]
   },
   {
@@ -78,9 +78,9 @@ const SDK_PRODUCTS = [
     desc: "Roasted cumin seeds ground fresh for a warm, nutty aroma — a pantry staple for tempering and finishing dishes.",
     ingredients: "100% Cumin Seeds",
     sizes: [
-      { key: "1kg", label: "1 kg", mrp: 950, price: 760, front: "images/cumin-powder-front-nobg.png", back: null },
-      { key: "500g", label: "500 g", mrp: 380, price: 304, front: "images/cumin-powder-front-nobg.png", back: null },
-      { key: "200g", label: "200 g", mrp: 240, price: 192, front: "images/cumin-powder-front-nobg.png", back: null }
+      { key: "1kg", label: "1 kg", mrp: 950, price: 760, front: "images/cumin-powder-1kg-front.png", back: "images/cumin-powder-1kg-back.png" },
+      { key: "500g", label: "500 g", mrp: 380, price: 304, front: "images/cumin-powder-500g-front.png", back: "images/cumin-powder-500g-back.png" },
+      { key: "200g", label: "200 g", mrp: 240, price: 192, front: "images/cumin-powder-200g-front.png", back: "images/cumin-powder-200g-back.png" }
     ]
   },
   {
@@ -91,9 +91,9 @@ const SDK_PRODUCTS = [
     desc: "Bright, aromatic turmeric powder milled from select rhizomes — the everyday base note of Indian cooking.",
     ingredients: "100% Turmeric",
     sizes: [
-      { key: "1kg", label: "1 kg", mrp: 720, price: 576, front: "images/haldi-powder-front-nobg.png", back: null },
-      { key: "500g", label: "500 g", mrp: 380, price: 304, front: "images/haldi-powder-front-nobg.png", back: null },
-      { key: "200g", label: "200 g", mrp: 220, price: 176, front: "images/haldi-powder-front-nobg.png", back: null }
+      { key: "1kg", label: "1 kg", mrp: 720, price: 576, front: "images/haldi-powder-1kg-front.jpeg", back: "images/haldi-powder-1kg-back.jpeg" },
+      { key: "500g", label: "500 g", mrp: 380, price: 304, front: "images/haldi-powder-500g-front.png", back: "images/haldi-powder-500g-back.jpeg" },
+      { key: "200g", label: "200 g", mrp: 220, price: 176, front: "images/haldi-powder-200g-front.jpeg", back: "images/haldi-powder-200g-back.jpeg" }
     ]
   },
 
@@ -119,9 +119,9 @@ const SDK_PRODUCTS = [
     desc: "A fragrant, layered blend of whole spices built for restaurant-style chicken biryani — bold on aroma, balanced on heat.",
     ingredients: "Coriander, Red Chilli, Cumin, Cinnamon, Cardamom, Cloves, Star Anise & Spices",
     sizes: [
-      { key: "1kg", label: "1 kg", mrp: 1110, price: 888, front: "images/chicken-biryani-masala-front-nobg.png", back: null },
-      { key: "500g", label: "500 g", mrp: 560, price: 448, front: "images/chicken-biryani-masala-front-nobg.png", back: null },
-      { key: "200g", label: "200 g", mrp: 280, price: 224, front: "images/chicken-biryani-masala-front-nobg.png", back: null }
+      { key: "1kg", label: "1 kg", mrp: 1110, price: 888, front: "images/chicken-biryani-masala-1kg-front.png", back: "images/chicken-biryani-masala-1kg-back.jpeg" },
+      { key: "500g", label: "500 g", mrp: 560, price: 448, front: "images/chicken-biryani-masala-500g-front.jpeg", back: "images/chicken-biryani-masala-500g-back.jpeg" },
+      { key: "200g", label: "200 g", mrp: 280, price: 224, front: "images/chicken-biryani-masala-200g-front.png", back: "images/chicken-biryani-masala-200g-back.png" }
     ]
   },
   {
