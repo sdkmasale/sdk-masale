@@ -314,13 +314,13 @@
     const pincode = document.getElementById('f-pincode').value.trim();
     const address = document.getElementById('f-address').value.trim();
 
-    const order = {
+     const order = {
       id: 'SDK' + Date.now().toString().slice(-6),
       timestamp: new Date().toISOString(),
       customer: (firstName + ' ' + lastName).trim(),
       phone: phone,
       address: address + ', ' + city + ', ' + state + ' - ' + pincode,
-      items: cart.map(i => `${i.name} ${i.sizeLabel} x${i.qty}`).join(', '),
+      items: cart.map(i => ({ name: i.name, sizeLabel: i.sizeLabel, qty: i.qty, price: i.price })),
       itemCount: cart.reduce((n, i) => n + i.qty, 0),
       total: cartTotal(),
       status: 'Placed'
